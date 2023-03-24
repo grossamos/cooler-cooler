@@ -1,0 +1,25 @@
+version: '3.0'
+services:
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    env_file:
+      - secrects.env
+  backend:
+    image: cooler:latest
+    build:
+      context: backend
+    ports: 
+      - "7643:8080"
+  frontend:
+    image: nginx:1.23.3
+    ports: 
+      - "7644:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+
+volumes:
+  redis_data:

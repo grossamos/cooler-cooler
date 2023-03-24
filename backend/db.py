@@ -1,0 +1,55 @@
+import redis
+import json
+
+redis_db = redis.Redis(host='localhost', port=6379, db=0)
+
+def loc_str(loc):
+    if loc == 0:
+        return "_inside"
+    elif loc == 1:
+        return "_outside"
+
+def set_current_temp(temp, loc):
+    redis_db.set("current_temp" + loc_str(loc), temp)
+
+
+def get_current_temp(loc):
+    temp = redis_db.get("current_temp" + loc_str(loc))
+    if temp != None:
+        return temp
+    else:
+        return 0
+
+
+def add_temperature_to_history(temp, loc):
+    temp_json = json.dumps(temp)
+    redis_db.lpush("temp_history" + loc_str(loc), temp_json)
+    redis_db.ltrim("temp_history" + loc_str(loc), 0, 3 * 24 * 12) # 3 days, every hour, every 5 min
+
+
+def get_temperature_history(loc):
+    history_raw = redis_db.lrange("temp_history" + loc_str(loc), 0, 3 * 24 * 12) # 3 days, every hour, every 5 min
+    history = unmarshal_temp_array(history_raw)
+
+    for entry in history_raw:
+        history.append(json.loads(entry))
+
+    return history
+
+
+def get_last_temperature_from_history(loc):
+    history_raw = redis_db.lrange("temp_history" + loc_str(loc), 0, 1)
+    history = unmarshal_temp_array(history_raw)
+    if len(history) == 0:
+        return {"temperature": 0, "time": 0}
+    else:
+        return history[0]
+
+
+def unmarshal_temp_array(temps_raw):
+    temps = []
+
+    for entry in temps_raw:
+        temps.append(json.loads(entry))
+
+    return temps
