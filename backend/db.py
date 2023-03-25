@@ -1,7 +1,8 @@
 import redis
 import json
 
-redis_db = redis.Redis(host='localhost', port=6379, db=0)
+REDIS_HOST = os.environ.get("REDIS_HOST")
+redis_db = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
 def loc_str(loc):
     if loc == 0:

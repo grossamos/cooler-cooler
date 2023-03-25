@@ -1,10 +1,24 @@
 # IOT Cooler
-## Setup
-First setup the python venv:
+## Development Setup
+First setup the python venv for the backend:
 ```bash
+cd backend
 mkdir venv
 python3 -m venv venv
 source venv/bin/activate
+pip install -r requirements.txt
+export REDIS_HOST=localhost
+```
+
+Next start a dev server for the frontend:
+```bash
+cd frontend
+python3 -m http.server
+```
+
+Finally start redis via docker:
+```bash 
+docker run -d redis
 ```
 
 ## Motivation & Concept
