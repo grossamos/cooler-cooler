@@ -1,0 +1,1 @@
+int upload_temperature(const char* location, float temperature);

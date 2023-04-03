@@ -1,3 +1,3 @@
-const char* ssid        = "";
-const char* password    = "";
-const char* auth_key    = "";
+#define SSID "ssid"
+#define PASSWORD "password"
+#define BACKEND_CREDENTIAL "credential"
