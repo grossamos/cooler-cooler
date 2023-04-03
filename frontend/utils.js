@@ -5,7 +5,7 @@ var creds
 async function check_creds() {
     creds = localStorage.getItem("credentials");
 
-    const response = await fetch(base_url, {
+    const response = await fetch(base_url + "/", {
         method: "GET",
         headers: {
             "Authorization": creds,

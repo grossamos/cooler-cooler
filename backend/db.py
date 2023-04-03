@@ -1,5 +1,6 @@
 import redis
 import json
+import os
 
 REDIS_HOST = os.environ.get("REDIS_HOST")
 redis_db = redis.Redis(host=REDIS_HOST, port=6379, db=0)

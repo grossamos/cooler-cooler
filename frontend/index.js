@@ -35,7 +35,13 @@ async function update_status() {
 }
 
 function format_date(date, show_time) {
-    return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + (show_time? " " + date.getHours() + ":" + date.getMinutes() : "");
+    let min = date.getMinutes();
+    if (min == 0) {
+        min = "00";
+    } else if (min < 10) {
+        min = "0" + min;
+    }
+    return date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + (show_time? " " + date.getHours() + ":" + min : "");
 }
 
 function draw_power_chart(plug_status) {
