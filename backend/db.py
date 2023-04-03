@@ -34,9 +34,6 @@ def get_temperature_history(loc):
     history_raw = redis_db.lrange("temp_history" + loc_str(loc), 0, history_length) # 3 days, every hour, every 5 min
     history = unmarshal_temp_array(history_raw)
 
-    for entry in history_raw:
-        history.append(json.loads(entry))
-
     return history
 
 
