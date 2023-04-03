@@ -143,9 +143,10 @@ async function show_inner_temp() {
             "Authorization": creds,
         }
     })
-    let enable = await enable_inner_response.json();
+    let enable = await enable_inner_response.text(); 
+    console.log(enable);
 
-    if (!enable) {
+    if (enable === "false") {
         document.getElementById("inside-temperature").style["display"] = "none";
     }
 }
