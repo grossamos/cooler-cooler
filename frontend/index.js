@@ -13,6 +13,7 @@ async function init() {
     await testCredentials();
     init_temperature();
     update_status();
+    show_inner_temp();
 }
 
 async function update_status() {
@@ -133,6 +134,20 @@ async function init_temperature() {
         }
     });
     document.getElementById("temp-out-status").innerHTML = outer_respose.current_temp
+}
+
+async function show_inner_temp() {
+    let enable_inner_response = await fetch(base_url + "/enable", {
+        method: "GET",
+        headers: {
+            "Authorization": creds,
+        }
+    })
+    let enable = await enable_inner_response.json();
+
+    if (!enable) {
+        document.getElementById("inside-temperature").style["display"] = "none";
+    }
 }
 
 async function toggle_power() {

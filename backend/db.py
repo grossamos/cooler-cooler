@@ -55,3 +55,22 @@ def unmarshal_temp_array(temps_raw):
         temps.append(json.loads(entry))
 
     return temps
+
+def save_temperature_threshold(temp, loc):
+    temp_json = json.dumps(temp)
+    redis_db.set("temp_threshold" + loc_str(loc), temp_json)
+
+def retrieve_temp_threshold(loc):
+    temp = redis_db.get("temp_threshold" + loc_str(loc))
+    if temp != None:
+        return json.loads(temp)
+    else:
+        return 0
+
+def save_enable_inner(enable):
+    enable_json = json.dumps(enable)
+    redis_db.set("enable_inner", enable_json)
+
+def retrieve_enable_inner():
+    enable_json = redis_db.get("enable_inner")
+    return json.loads(enable_json)

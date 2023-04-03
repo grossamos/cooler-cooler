@@ -1,7 +1,7 @@
 from aiohttp import web
 from meross import turn_device_on, turn_device_off, get_consumption
 from auth import auth_middleware
-from db import get_current_temp, set_current_temp, get_temperature_history, add_temperature_to_history, get_last_temperature_from_history
+from db import get_current_temp, set_current_temp, get_temperature_history, add_temperature_to_history, get_last_temperature_from_history, save_temperature_threshold, retrieve_temp_threshold, save_enable_inner, retrieve_enable_inner
 from datetime import datetime, timezone
 
 async def base_route(request):
@@ -61,6 +61,40 @@ async def get_temerature_data(request, loc):
     }
     return web.json_response(response_payload)
 
+async def set_temperature_threshold_inner(request):
+    return await set_temperature_threshold(request, 0)
+
+async def set_temperature_threshold_outer(request):
+    return await set_temperature_threshold(request, 1)
+
+async def set_temperature_threshold(request, loc):
+    incoming_payload = await request.json()
+    temperature = incoming_payload["temperature"]
+
+    save_temperature_threshold(temperature, loc)
+    return web.json_response(temperature)
+
+async def get_temerature_threshold_inner(request):
+    return await get_temerature_threshold(request, 0)
+
+async def get_temerature_threshold_outer(request):
+    return await get_temerature_threshold(request, 1)
+
+async def get_temerature_threshold(request, loc):
+    temperature = retrieve_temp_threshold(loc)
+    print(temperature)
+    return web.json_response(temperature)
+
+async def set_enable_inner(request):
+    incoming_payload = await request.json()
+    enable = incoming_payload["enable"]
+    save_enable_inner(enable)
+    return web.json_response(enable)
+
+async def get_enable_inner(request):
+    enable = retrieve_enable_inner()
+    return web.json_response(enable)
+
 
 app = web.Application(middlewares=[auth_middleware])
 app.add_routes([
@@ -71,6 +105,12 @@ app.add_routes([
     web.post("/temperature/outer", set_temperature_outer),
     web.get("/temperature/inner", get_temerature_data_inner),
     web.get("/temperature/outer", get_temerature_data_outer),
+    web.get("/threshold/inner", get_temerature_threshold_inner),
+    web.get("/threshold/outer", get_temerature_threshold_outer),
+    web.post("/threshold/inner", set_temperature_threshold_inner),
+    web.post("/threshold/outer", set_temperature_threshold_outer),
+    web.get("/enable", get_enable_inner),
+    web.post("/enable", set_enable_inner)
 ])
 
 if __name__ == "__main__":
