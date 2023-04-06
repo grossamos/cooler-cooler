@@ -3,6 +3,7 @@ from meross import turn_device_on, turn_device_off, get_consumption
 from auth import auth_middleware
 from db import get_current_temp, set_current_temp, get_temperature_history, add_temperature_to_history, get_last_temperature_from_history, save_temperature_threshold, retrieve_temp_threshold, save_enable_inner, retrieve_enable_inner
 from datetime import datetime, timezone
+from ctrlcheck import ctrl_check
 
 async def base_route(request):
     response_payload = {"message": "hello world", "status": "healthy"}
@@ -95,6 +96,10 @@ async def get_enable_inner(request):
     enable = retrieve_enable_inner()
     return web.json_response(enable)
 
+async def run_maintenance(request):
+    await ctrl_check()
+    return web.json_response({"status": "up to date"})
+
 
 app = web.Application(middlewares=[auth_middleware])
 app.add_routes([
@@ -110,7 +115,8 @@ app.add_routes([
     web.post("/threshold/inner", set_temperature_threshold_inner),
     web.post("/threshold/outer", set_temperature_threshold_outer),
     web.get("/enable", get_enable_inner),
-    web.post("/enable", set_enable_inner)
+    web.post("/enable", set_enable_inner),
+    web.post("/maintenance`", run_maintenance)
 ])
 
 if __name__ == "__main__":
