@@ -50,7 +50,7 @@ function draw_power_chart(plug_status) {
     let labels = [];
 
     for (let i = 1; i <= plug_status.daily_power.length; i++) {
-        let date = new Date(new Date() - plug_status.daily_power.length + i);
+        let date = new Date(new Date() - (plug_status.daily_power.length + i) * 1000 * 60 * 60 * 24);
         labels.push(format_date(date));
     }
 
