@@ -20,6 +20,12 @@ services:
       - "7644:80"
     volumes:
       - ./frontend:/usr/share/nginx/html:ro
+  cron:
+    image: cooler-cron:latest
+    build:
+      context: backend/crontab
+    env_file:
+      - secrets.env
 
 volumes:
   redis_data:

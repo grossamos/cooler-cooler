@@ -116,7 +116,7 @@ app.add_routes([
     web.post("/threshold/outer", set_temperature_threshold_outer),
     web.get("/enable", get_enable_inner),
     web.post("/enable", set_enable_inner),
-    web.post("/maintenance`", run_maintenance)
+    web.post("/maintenance", run_maintenance)
 ])
 
 if __name__ == "__main__":

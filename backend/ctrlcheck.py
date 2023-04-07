@@ -4,11 +4,11 @@ import os
 import asyncio
 
 async def ctrl_check():
-    current_temp_inside = int(get_current_temp(0))
-    current_temp_outside = int(get_current_temp(1))
+    current_temp_inside = float(get_current_temp(0))
+    current_temp_outside = float(get_current_temp(1))
 
-    temp_threshold_inner = retrieve_temp_threshold(0)
-    temp_threshold_outside = retrieve_temp_threshold(1)
+    temp_threshold_inner = float(retrieve_temp_threshold(0))
+    temp_threshold_outside = float(retrieve_temp_threshold(1))
 
     inner_enabled = retrieve_enable_inner()
 
